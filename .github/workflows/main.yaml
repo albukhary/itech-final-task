@@ -14,6 +14,7 @@ on:
         options:
         - Deploy
         - Destroy
+        - Build-Push-Image
 env:
   BACKEND_DYNAMO_TABLE_NAME: itech-final-tfstate-lock
   BACKEND_S3_BUCKET_NAME: itech-final-state
@@ -144,3 +145,23 @@ jobs:
         aws dynamodb delete-table \
           --table-name ${{ env.BACKEND_DYNAMO_TABLE_NAME }} \
       if: steps.check-dynamodb-table.outputs.exists == 'true'
+
+  build-and-push:
+    if: ${{ github.event.inputs.action == 'Build-Push-Image' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and Push Docker Image
+        uses: docker/build-push-action@v2
+        with:
+          context: ./application
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/my-app:${{ github.sha }}
