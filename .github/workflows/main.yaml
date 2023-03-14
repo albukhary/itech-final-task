@@ -190,8 +190,8 @@ jobs:
 #        if: steps.plan.authenticate_eks == 'success'
         id: deploy_app
         run: |
-          kubectl apply -auto-approve k8s/deployment.yaml
+          kubectl apply -auto-approve -f k8s/deployment.yaml
       - name: Apply Ingress
 #        if: steps.plan.deploy_app == 'success'
         run: |
-          kubectl apply -auto-approve k8s/ingress.yaml
+          kubectl apply -auto-approve -f k8s/ingress.yaml
