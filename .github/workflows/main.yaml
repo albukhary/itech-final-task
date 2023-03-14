@@ -187,11 +187,11 @@ jobs:
         run: aws eks update-kubeconfig --name iTechFinalTask-cluster
 
       - name: Apply Deployment
-        if: steps.plan.authenticate_eks == 'success'
+#        if: steps.plan.authenticate_eks == 'success'
         id: deploy_app
         run: |
           kubectl apply -auto-approve k8s/deployment.yaml
       - name: Apply Ingress
-        if: steps.plan.deploy_app == 'success'
+#        if: steps.plan.deploy_app == 'success'
         run: |
           kubectl apply -auto-approve k8s/ingress.yaml
