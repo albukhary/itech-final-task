@@ -1,4 +1,4 @@
-name: Deploy-|-Destroy the Application
+name: Build | Push | Deploy | Destroy
 
 on:
   # push:
@@ -6,9 +6,9 @@ on:
   #     - main
   workflow_dispatch:
     inputs:
-      # Select Terraform action you want to perform
+      # Select Job you want to perform
       action:
-        description: 'Terraform Action to Perform'
+        description: 'Action to Perform'
         type: choice
         required: true
         options:
