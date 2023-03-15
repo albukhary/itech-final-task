@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: my-app
-        image: lazizbekkahramonov/my-app:4a0addce1df0408cdd270ee9db5df24abe529b0f
+        image: lazizbekkahramonov/my-app:b281639e6b7554d9dff52fefc85c013c04adb2f2
         resources:
           limits:
             cpu: "1"
