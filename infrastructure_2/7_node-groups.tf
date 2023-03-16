@@ -7,14 +7,19 @@ resource "aws_eks_node_group" "this" {
 
   scaling_config {
     desired_size = 1
-    max_size     = 5
+    max_size     = 2
     min_size     = 1
   }
 
-  ami_type       = "AL2_x86_64"
-  capacity_type  = "ON_DEMAND"
-  disk_size      = 8
-  instance_types = ["t2.micro"]
+  # ami_type       = "AL2_x86_64"
+  # capacity_type  = "ON_DEMAND"
+  # disk_size      = 8
+  launch_template {
+    id      = aws_launch_template.example.id
+    version = "$Latest"
+  }
+
+  # instance_types = ["t2.micro"]
 
   tags = merge(
     var.tags
@@ -103,3 +108,14 @@ resource "aws_security_group_rule" "nodes_cluster_inbound" {
   to_port                  = 65535
   type                     = "ingress"
 }
+
+# # Added for testing
+# resource "aws_security_group_rule" "nodes_cluster_outbound" {
+#   description              = "Allow worker node talk to cluster"
+#   from_port                = 0
+#   protocol                 = "tcp"
+#   security_group_id        = aws_security_group.eks_nodes.id
+#   source_security_group_id = aws_security_group.eks_cluster.id
+#   to_port                  = 65535
+#   type                     = "egress"
+# }
