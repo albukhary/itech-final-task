@@ -200,7 +200,7 @@ jobs:
             AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   # Then Destroy Networking - VPC
   tf_destroy_vpc:
-    name: "Terraform_destroy_vpc"
+    name: "Terraform Destroy VPC - Networking"
     needs: [tf_destroy_eks]
     runs-on: ubuntu-latest
     steps:
