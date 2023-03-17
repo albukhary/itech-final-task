@@ -103,6 +103,7 @@ resource "aws_route" "main" {
   destination_cidr_block = "0.0.0.0/0"
 }
 
+
 # Security group for public subnet
 resource "aws_security_group" "public_sg" {
   name   = "${var.project}-Public-sg"
@@ -181,6 +182,17 @@ resource "aws_security_group_rule" "node_outbound" {
   protocol          = "-1"
   cidr_blocks       = ["0.0.0.0/0"]
 }
+
+# ########## Allow ssh to node
+# resource "aws_security_group_rule" "nodes_ssh" {
+#   description       = "Allow ssh"
+#   security_group_id = aws_security_group.data_plane_sg.id
+#   type              = "ingress"
+#   from_port         = 22
+#   to_port           = 22
+#   protocol          = "tcp"
+#   cidr_blocks       = ["0.0.0.0/0"]
+# }
 
 # Security group for control plane
 resource "aws_security_group" "control_plane_sg" {

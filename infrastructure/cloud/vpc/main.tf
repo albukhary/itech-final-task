@@ -30,7 +30,5 @@ provider "aws" {
 
 
 module "vpc" {
-  source          = "../../modules/vpc"
-  networking      = var.networking
-  security_groups = var.security_groups
+  source = "../../modules/vpc"
 }

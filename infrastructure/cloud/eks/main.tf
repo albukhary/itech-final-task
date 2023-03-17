@@ -43,7 +43,12 @@ module "eks" {
   source             = "../../modules/eks"
   public_subnets_id  = data.terraform_remote_state.vpc.outputs.public_subnets_id
   private_subnets_id = data.terraform_remote_state.vpc.outputs.private_subnets_id
-  security_groups_id = data.terraform_remote_state.vpc.outputs.security_groups_id
-  cluster_name       = "${var.project_name}-${var.cluster_name}"
-  nodegroup_name     = "${var.project_name}-${var.nodegroup_name}"
+
+  eks_cluster_sg_id   = data.terraform_remote_state.vpc.outputs.eks_cluster_sg_id
+  eks_nodes_sg_id     = data.terraform_remote_state.vpc.outputs.eks_nodes_sg_id
+  eks_nodes_sg_name   = data.terraform_remote_state.vpc.outputs.eks_nodes_sg_name
+  eks_cluster_sg_name = data.terraform_remote_state.vpc.outputs.eks_cluster_sg_name
+
+  cluster_name   = "${var.project_name}-${var.cluster_name}"
+  nodegroup_name = "${var.project_name}-${var.nodegroup_name}"
 }
