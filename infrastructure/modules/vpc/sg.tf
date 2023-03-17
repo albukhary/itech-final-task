@@ -71,11 +71,11 @@ resource "aws_security_group_rule" "nodes_cluster_inbound" {
 
 # Added for testing
 resource "aws_security_group_rule" "nodes_ssh" {
-  description              = "SSH into node"
-  from_port                = 22
-  protocol                 = "tcp"
-  security_group_id        = aws_security_group.eks_nodes.id
-  cidr_blocks = ["0.0.0.0/0"]
-  to_port                  = 22
-  type                     = "ingress"
+  description       = "SSH into node"
+  from_port         = 22
+  protocol          = "tcp"
+  security_group_id = aws_security_group.eks_nodes.id
+  cidr_blocks       = ["0.0.0.0/0"]
+  to_port           = 22
+  type              = "ingress"
 }

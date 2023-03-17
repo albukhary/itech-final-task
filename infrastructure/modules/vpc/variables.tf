@@ -12,8 +12,8 @@ variable "availability_zones_count" {
 
 variable "project" {
   description = "Name to be used on all the resources as identifier"
-  type = string
-  default = "iTech-final-task"
+  type        = string
+  default     = "iTech-final-task"
 }
 
 variable "vpc_cidr" {

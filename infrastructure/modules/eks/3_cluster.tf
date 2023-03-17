@@ -4,8 +4,8 @@ resource "aws_eks_cluster" "eks-cluster" {
   version  = "1.25"
 
   vpc_config {
-    subnet_ids          = flatten([ var.public_subnets_id, var.private_subnets_id ])
-    security_group_ids  = flatten([ var.eks_cluster_sg_id, var.eks_nodes_sg_id ])
+    subnet_ids              = flatten([var.public_subnets_id, var.private_subnets_id])
+    security_group_ids      = flatten([var.eks_cluster_sg_id, var.eks_nodes_sg_id])
     endpoint_private_access = "true"
     endpoint_public_access  = "true"
   }
