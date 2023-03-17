@@ -27,7 +27,7 @@ variable "cluster_name" {
 variable "nodegroup_name" {
   description = "Name of the EKS nodegroup"
   type        = string
-  default     = "t2_micro-node_group"
+  default     = "node-group"
 }
 
 ###### Varibles for Nodegroup nodes
@@ -46,7 +46,7 @@ variable "ami_id" {
 variable "instance_type" {
   description = "Type of node"
   type        = string
-  default     = "t2.micro"
+  default     = "t3.small"
 }
 
 variable "key_name" {
@@ -58,5 +58,5 @@ variable "key_name" {
 variable "ebs_volume_size" {
   description = "Size of the EBS Volume to be attached to the node"
   type        = number
-  default     = 8
+  default     = 30
 }

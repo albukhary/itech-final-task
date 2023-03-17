@@ -13,5 +13,5 @@ variable "cluster_name" {
 variable "nodegroup_name" {
   description = "Name of the EKS nodegroup"
   type        = string
-  default     = "t2_micro-node_group"
+  default     = "iTech-final-task-node_group"
 }
