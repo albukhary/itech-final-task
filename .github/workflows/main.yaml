@@ -155,10 +155,9 @@ jobs:
       working-directory: ./infrastructure/cloud/eks
       run: |
         terraform plan -input=false -no-color -out=tfplan \
-        -var "instance_type=${{ github.event.inputs.instance_type }}" \
-        -var "instance_num=${{ github.event.inputs.instance_num }}" \
         && terraform show -no-color tfplan          
-
+#        -var "instance_type=${{ github.event.inputs.instance_type }}" \
+#        -var "instance_num=${{ github.event.inputs.instance_num }}" \
     - name: Apply Terraform
       if: steps.plan.outcome == 'success'
       id: apply
