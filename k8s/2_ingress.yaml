@@ -3,8 +3,8 @@ kind: Ingress
 metadata:
   name: express
   namespace: staging
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
+  # annotations:
+  #   nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   ingressClassName: external-nginx
   rules:
@@ -17,11 +17,11 @@ spec:
           service:
             name: express
             port:
-              name: http
+              number: 3000
       - path: /metrics
         pathType: Prefix
         backend:
           service:
             name: express
             port:
-              name: http
+              number: 3000

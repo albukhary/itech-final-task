@@ -34,3 +34,10 @@ kubernetes apply -f 2_ingress.yaml
 # # Get Kubernetes services.
 # Get DNS of that service
 # kubectl get svc -n ingress-nginx
+
+
+### Access it from the internet
+curl -H 'Host: express.familygiftme.com' a00f0f91fb88b45bd94e9ceafd4aa990-c2299ac83350dbec.elb.us-east-1.amazonaws.com
+
+# Cannot update DNS address of ingres 
+# https://youtu.be/9sLHoEyRq8w?t=1133
