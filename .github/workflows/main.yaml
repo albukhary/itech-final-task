@@ -424,7 +424,7 @@ jobs:
 
   # After successful deployment of EKS Cluster
   run_app_test:
-    name: Create K8s resources and run app
+    name: TEST Create K8s resources and run app
     runs-on: ubuntu-latest
 
     steps:
@@ -466,7 +466,7 @@ jobs:
 
 
   destroy_app_test:
-    name: Uninstall app & destroy K8s resources
+    name: TEST Uninstall app & destroy K8s resources
     runs-on: ubuntu-latest
 
     steps:
