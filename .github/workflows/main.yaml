@@ -445,19 +445,15 @@ jobs:
         run: aws eks update-kubeconfig --name iTech-final-task-cluster --region us-east-1
 
       - name: Install eksctl
-        uses: weaveworks/eksctl-action@v0.3.0
+        uses: moia-oss/setup-eksctl@v1
 
-      # - name: Install kubectl
-      #   uses: azure/setup-kubectl@v1
       - name: Install kubectl
-        uses: dawidd6/action-install-kubectl@v1
-        with:
-          kubectl-version: '1.26.1'
+        uses: azure/setup-kubectl@v3
 
       - name: Install Helm
-        uses: helm/setup-helm@v1
+        uses: azure/setup-helm@v3
         with:
-          helm-version: '3.11.2'
+          version: '3.11.2' # default is latest (stable)
 
       - name: Deploy app to EKS
         working-directory: ./k8s/scripts
@@ -488,19 +484,15 @@ jobs:
         run: aws eks update-kubeconfig --name iTech-final-task-cluster --region us-east-1
 
       - name: Install eksctl
-        uses: weaveworks/eksctl-action@v0.3.0
+        uses: moia-oss/setup-eksctl@v1
 
-      # - name: Install kubectl
-      #   uses: azure/setup-kubectl@v1
       - name: Install kubectl
-        uses: dawidd6/action-install-kubectl@v1
-        with:
-          kubectl-version: '1.26.1'
+        uses: azure/setup-kubectl@v3
 
       - name: Install Helm
-        uses: helm/setup-helm@v1
+        uses: azure/setup-helm@v3
         with:
-          helm-version: '3.11.2'
+          version: '3.11.2' # default is latest (stable)
 
       - name: Destroy app on EKS
         working-directory: ./k8s/scripts
