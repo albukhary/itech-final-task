@@ -167,12 +167,99 @@ jobs:
           -input=false \
           -no-color \
           tfplan
-          
+  # After successful deployment of EKS Cluster
+  run_app:
+    name: Create K8s resources and run app
+    needs: [tf_plan_apply_eks]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Install eksctl
+        working-directory: ./k8s/scripts
+        run: |
+          sudo apt-get update && sudo apt-get install -y \
+          curl \
+          gettext \
+          git \
+          jq
+          sudo curl --silent --location -o /usr/local/bin/eksctl "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz"
+          sudo chmod +x /usr/local/bin/eksctl \
+
+
+      - name: Install kubectl
+        run: |
+          sudo curl --silent --location -o /usr/local/bin/kubectl "https://dl.k8s.io/release/$(curl --silent --location https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+          sudo chmod +x /usr/local/bin/kubectl
+
+      - name: Install Helm
+        run: |
+          sudo curl --silent --location https://get.helm.sh/helm-v3.7.1-linux-amd64.tar.gz | tar zx
+          sudo mv linux-amd64/helm /usr/local/bin/helm
+          sudo chmod +x /usr/local/bin/helm
+
+      - name: Deploy app to EKS
+        run: |
+          sudo chmod +x setup.sh \
+          /bin/bash setup.sh
   ###-----!!!!!!!!!!----- If you selected to destroy the resources
-  # First destroy EKS cluster
+  # After successful deployment of EKS Cluster
+  destroy_app:
+    name: Create K8s resources and run app
+    if: ${{ github.event.inputs.action == 'Destroy' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Install eksctl
+        working-directory: ./k8s/scripts
+        run: |
+          sudo apt-get update && sudo apt-get install -y \
+          curl \
+          gettext \
+          git \
+          jq
+          sudo curl --silent --location -o /usr/local/bin/eksctl "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz"
+          sudo chmod +x /usr/local/bin/eksctl \
+
+
+      - name: Install kubectl
+        run: |
+          sudo curl --silent --location -o /usr/local/bin/kubectl "https://dl.k8s.io/release/$(curl --silent --location https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+          sudo chmod +x /usr/local/bin/kubectl
+
+      - name: Install Helm
+        run: |
+          sudo curl --silent --location https://get.helm.sh/helm-v3.7.1-linux-amd64.tar.gz | tar zx
+          sudo mv linux-amd64/helm /usr/local/bin/helm
+          sudo chmod +x /usr/local/bin/helm
+
+      - name: Deploy app to EKS
+        run: |
+          sudo chmod +x destroy.sh \
+          /bin/bash destroy.sh
+  # Second destroy EKS cluster
   tf_destroy_eks:
     name: "Destroy EKS cluster"
-    if: ${{ github.event.inputs.action == 'Destroy' }}
+    needs: [destroy_app]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
