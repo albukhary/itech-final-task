@@ -1,43 +1,20 @@
 #!/bin/bash
 
-helm repo add ingress-nginx \
-  https://kubernetes.github.io/ingress-nginx
+# Follow this documentation
+# https://docs.aws.amazon.com/eks/latest/userguide/aws-load-balancer-controller.html
 
-helm repo update
+# Create Load Balancer Controller Service Account
+kubectl apply -f aws-load-balancer-controller-service-account.yaml
 
-helm search repo nginx
-# ingress-nginx/ingress-nginx     4.5.2           1.6.4
+# Add helm repository to install EKS charts
+helm repo add eks https://aws.github.io/eks-charts
 
-# Generate yaml from helm charts
-helm template my-ing ingress-nginx/ingress-nginx \
-  --namespace ingress-nginx \
-  --version 4.5.2 \
-  --values values.yaml \
-  --output-dir my-ing
+# Install AWS Load Balancer Controller
+helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
+  -n kube-system \
+  --set clusterName=iTech-final-task-cluster \
+  --set serviceAccount.create=false \
+  --set serviceAccount.name=aws-load-balancer-controller 
 
-# Deploy Nginx ingress with Helm.
-helm install my-ing ingress-nginx/ingress-nginx \
-  --namespace ingress-nginx \
-  --version 4.5.2 \
-  --values values.yaml \
-  --create-namespace
-
-# List Helm releases.
-# helm list -n ingress-nginx
-
-# # Get nginx pods.
-# kubectl get pods -n ingress-nginx
-
-# Apply - deploy your nginx ingress
-kubernetes apply -f 2_ingress.yaml
-
-# # Get Kubernetes services.
-# Get DNS of that service
-# kubectl get svc -n ingress-nginx
-
-
-### Access it from the internet
-curl -H 'Host: express.familygiftme.com' a00f0f91fb88b45bd94e9ceafd4aa990-c2299ac83350dbec.elb.us-east-1.amazonaws.com
-
-# Cannot update DNS address of ingres 
-# https://youtu.be/9sLHoEyRq8w?t=1133
+# Get the URL of ingress to access from browser
+kubectl get ing -n staging | awk 'FNR == 2 {print $4}'

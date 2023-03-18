@@ -3,13 +3,13 @@ kind: Ingress
 metadata:
   name: express
   namespace: staging
-  # annotations:
-  #   nginx.ingress.kubernetes.io/rewrite-target: /
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
 spec:
-  ingressClassName: external-nginx
   rules:
-  - host: express.familygiftme.com
-    http:
+  - http:
       paths:
       - path: /
         pathType: Prefix
