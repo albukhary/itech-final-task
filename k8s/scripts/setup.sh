@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# aws eks update-kubeconfig --name iTech-final-task-cluster --region us-east-1
+aws eks update-kubeconfig --name iTech-final-task-cluster --region us-east-1
 
 # Follow this documentation
 # https://docs.aws.amazon.com/eks/latest/userguide/aws-load-balancer-controller.html
@@ -95,11 +95,11 @@ helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
 
 # Now apply manifest files
 kubectl apply -f ../1-express.yaml
+
 kubectl apply -f ../2-ingress.yaml
 
 # Wait for some time until DNS url is given to ingress
-
-sleep 10
+sleep 60
 
 # Get the URL of ingress to access from browser
 kubectl get ing -n staging | awk 'FNR == 2 {print $4}'
