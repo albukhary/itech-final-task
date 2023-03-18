@@ -445,7 +445,14 @@ jobs:
         run: aws eks update-kubeconfig --name iTech-final-task-cluster --region us-east-1
 
       - name: Install eksctl
-        uses: moia-oss/setup-eksctl@v1
+        run: |
+          sudo apt-get update && sudo apt-get install -y \
+          curl \
+          gettext \
+          git \
+          jq
+          sudo curl --silent --location -o /usr/local/bin/eksctl "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz"
+          sudo chmod +x /usr/local/bin/eksctl
 
       - name: Install kubectl
         uses: azure/setup-kubectl@v3
