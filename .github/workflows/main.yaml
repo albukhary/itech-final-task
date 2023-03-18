@@ -183,33 +183,24 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-          run: |
-            echo 'Hello 1'
-            aws eks update-kubeconfig --name iTech-final-task-cluster --region us-east-1
-            echo 'Hello 2'  
-            cat ~/.kube/config 
-            echo 'Hello 3'
+
+      - name: Get kubeconfig file
+        run: aws eks update-kubeconfig --name iTech-final-task-cluster --region us-east-1
 
       - name: Install eksctl
-        run: |
-          sudo apt-get update && sudo apt-get install -y \
-          curl \
-          gettext \
-          git \
-          jq
-          sudo curl --silent --location -o /usr/local/bin/eksctl "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz"
-          sudo chmod +x /usr/local/bin/eksctl \
+        uses: weaveworks/eksctl-action@v0.3.0
 
+      # - name: Install kubectl
+      #   uses: azure/setup-kubectl@v1
       - name: Install kubectl
-        run: |
-          sudo curl --silent --location -o /usr/local/bin/kubectl "https://dl.k8s.io/release/$(curl --silent --location https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-          sudo chmod +x /usr/local/bin/kubectl
+        uses: dawidd6/action-install-kubectl@v1
+        with:
+          kubectl-version: '1.26.1'
 
       - name: Install Helm
-        run: |
-          sudo curl --silent --location https://get.helm.sh/helm-v3.7.1-linux-amd64.tar.gz | tar zx
-          sudo mv linux-amd64/helm /usr/local/bin/helm
-          sudo chmod +x /usr/local/bin/helm
+        uses: helm/setup-helm@v1
+        with:
+          helm-version: '3.11.2'
 
       - name: Deploy app to EKS
         working-directory: ./k8s/scripts
@@ -232,35 +223,26 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-          run: |
-            echo 'Hello 1'
-            aws eks update-kubeconfig --name iTech-final-task-cluster --region us-east-1
-            echo 'Hello 2'  
-            cat ~/.kube/config 
-            echo 'Hello 3'
+
+      - name: Get kubeconfig file
+        run: aws eks update-kubeconfig --name iTech-final-task-cluster --region us-east-1
+
       - name: Install eksctl
-        run: |
-          sudo apt-get update && sudo apt-get install -y \
-          curl \
-          gettext \
-          git \
-          jq
-          sudo curl --silent --location -o /usr/local/bin/eksctl "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz"
-          sudo chmod +x /usr/local/bin/eksctl \
+        uses: weaveworks/eksctl-action@v0.3.0
 
-
+      # - name: Install kubectl
+      #   uses: azure/setup-kubectl@v1
       - name: Install kubectl
-        run: |
-          sudo curl --silent --location -o /usr/local/bin/kubectl "https://dl.k8s.io/release/$(curl --silent --location https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-          sudo chmod +x /usr/local/bin/kubectl
+        uses: dawidd6/action-install-kubectl@v1
+        with:
+          kubectl-version: '1.26.1'
 
       - name: Install Helm
-        run: |
-          sudo curl --silent --location https://get.helm.sh/helm-v3.7.1-linux-amd64.tar.gz | tar zx
-          sudo mv linux-amd64/helm /usr/local/bin/helm
-          sudo chmod +x /usr/local/bin/helm
+        uses: helm/setup-helm@v1
+        with:
+          helm-version: '3.11.2'
 
-      - name: Deploy app to EKS
+      - name: Destroy app on EKS
         working-directory: ./k8s/scripts
         run: |
           sudo chmod +x destroy.sh 
@@ -436,3 +418,88 @@ jobs:
 #        if: steps.plan.deploy_app == 'success'
         run: |
           kubectl apply -f k8s/ingress.yaml
+
+
+
+
+  # After successful deployment of EKS Cluster
+  run_app_test:
+    name: Create K8s resources and run app
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Get kubeconfig file
+        run: aws eks update-kubeconfig --name iTech-final-task-cluster --region us-east-1
+
+      - name: Install eksctl
+        uses: weaveworks/eksctl-action@v0.3.0
+
+      # - name: Install kubectl
+      #   uses: azure/setup-kubectl@v1
+      - name: Install kubectl
+        uses: dawidd6/action-install-kubectl@v1
+        with:
+          kubectl-version: '1.26.1'
+
+      - name: Install Helm
+        uses: helm/setup-helm@v1
+        with:
+          helm-version: '3.11.2'
+
+      - name: Deploy app to EKS
+        working-directory: ./k8s/scripts
+        run: |
+          sudo chmod +x setup.sh
+          /bin/bash setup.sh
+
+
+
+
+  destroy_app_test:
+    name: Uninstall app & destroy K8s resources
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Get kubeconfig file
+        run: aws eks update-kubeconfig --name iTech-final-task-cluster --region us-east-1
+
+      - name: Install eksctl
+        uses: weaveworks/eksctl-action@v0.3.0
+
+      # - name: Install kubectl
+      #   uses: azure/setup-kubectl@v1
+      - name: Install kubectl
+        uses: dawidd6/action-install-kubectl@v1
+        with:
+          kubectl-version: '1.26.1'
+
+      - name: Install Helm
+        uses: helm/setup-helm@v1
+        with:
+          helm-version: '3.11.2'
+
+      - name: Destroy app on EKS
+        working-directory: ./k8s/scripts
+        run: |
+          sudo chmod +x destroy.sh 
+          /bin/bash destroy.sh

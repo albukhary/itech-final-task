@@ -1,6 +1,6 @@
 #!/bin/bash
 
-aws eks update-kubeconfig --name iTech-final-task-cluster --region us-east-1
+# aws eks update-kubeconfig --name iTech-final-task-cluster --region us-east-1
 
 # Follow this documentation
 # https://docs.aws.amazon.com/eks/latest/userguide/aws-load-balancer-controller.html
