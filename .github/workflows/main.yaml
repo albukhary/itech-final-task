@@ -16,6 +16,8 @@ on:
         - Destroy
         - Build-Push-Image
         - Deploy-App-to-EKS
+        - Test_Deploy_App
+        - Test_Destroy_App
 env:
   BACKEND_DYNAMO_TABLE_NAME: itech-final-tfstate-lock
   BACKEND_S3_BUCKET_NAME: itech-final-state
@@ -424,6 +426,7 @@ jobs:
 
   # After successful deployment of EKS Cluster
   run_app_test:
+    if: ${{ github.event.inputs.action == 'Test_Deploy_App' }}
     name: TEST Create K8s resources and run app
     runs-on: ubuntu-latest
 
@@ -466,6 +469,7 @@ jobs:
 
 
   destroy_app_test:
+    if: ${{ github.event.inputs.action == 'Test_Destroy_App' }}
     name: TEST Uninstall app & destroy K8s resources
     runs-on: ubuntu-latest
 
