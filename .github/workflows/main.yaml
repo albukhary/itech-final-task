@@ -208,7 +208,7 @@ jobs:
       - name: Deploy app to EKS
         working-directory: ./k8s/scripts
         run: |
-          sudo chmod +x setup.sh \
+          sudo chmod +x setup.sh
           /bin/bash setup.sh
   ###-----!!!!!!!!!!----- If you selected to destroy the resources
   # After successful deployment of EKS Cluster
@@ -253,7 +253,7 @@ jobs:
       - name: Deploy app to EKS
         working-directory: ./k8s/scripts
         run: |
-          sudo chmod +x destroy.sh \
+          sudo chmod +x destroy.sh 
           /bin/bash destroy.sh
   # Second destroy EKS cluster
   tf_destroy_eks:
