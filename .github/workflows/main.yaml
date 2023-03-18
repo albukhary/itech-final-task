@@ -217,7 +217,6 @@ jobs:
           sudo chmod +x setup.sh
           /bin/bash setup.sh
   ###-----!!!!!!!!!!----- If you selected to destroy the resources
-  # After successful deployment of EKS Cluster
   destroy_app:
     name: Uninstall app & destroy K8s resources
     if: ${{ github.event.inputs.action == 'Destroy' }}
@@ -269,8 +268,8 @@ jobs:
   # Second destroy EKS cluster
   tf_destroy_eks:
     name: "Destroy EKS cluster"
-    if: ${{ github.event.inputs.action == 'Destroy' }}
-    # needs: [destroy_app]
+    # if: ${{ github.event.inputs.action == 'Destroy' }}
+    needs: [destroy_app]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
