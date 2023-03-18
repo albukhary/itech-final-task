@@ -185,7 +185,6 @@ jobs:
           aws-region: us-east-1
 
       - name: Install eksctl
-        working-directory: ./k8s/scripts
         run: |
           sudo apt-get update && sudo apt-get install -y \
           curl \
@@ -194,7 +193,6 @@ jobs:
           jq
           sudo curl --silent --location -o /usr/local/bin/eksctl "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz"
           sudo chmod +x /usr/local/bin/eksctl \
-
 
       - name: Install kubectl
         run: |
@@ -208,13 +206,14 @@ jobs:
           sudo chmod +x /usr/local/bin/helm
 
       - name: Deploy app to EKS
+        working-directory: ./k8s/scripts
         run: |
           sudo chmod +x setup.sh \
           /bin/bash setup.sh
   ###-----!!!!!!!!!!----- If you selected to destroy the resources
   # After successful deployment of EKS Cluster
   destroy_app:
-    name: Create K8s resources and run app
+    name: Uninstall app & destroy K8s resources
     if: ${{ github.event.inputs.action == 'Destroy' }}
     runs-on: ubuntu-latest
 
@@ -230,7 +229,6 @@ jobs:
           aws-region: us-east-1
 
       - name: Install eksctl
-        working-directory: ./k8s/scripts
         run: |
           sudo apt-get update && sudo apt-get install -y \
           curl \
@@ -253,6 +251,7 @@ jobs:
           sudo chmod +x /usr/local/bin/helm
 
       - name: Deploy app to EKS
+        working-directory: ./k8s/scripts
         run: |
           sudo chmod +x destroy.sh \
           /bin/bash destroy.sh
