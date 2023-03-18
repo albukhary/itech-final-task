@@ -170,96 +170,16 @@ jobs:
           -no-color \
           tfplan
   # After successful deployment of EKS Cluster
-  run_app:
-    name: Create K8s resources and run app
-    needs: [tf_plan_apply_eks]
-    runs-on: ubuntu-latest
+  # Add here - Deploy app on EKS Cluster
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
-
-      - name: Get kubeconfig file
-        run: aws eks update-kubeconfig --name iTech-final-task-cluster --region us-east-1
-
-      - name: Install eksctl
-        run: |
-          sudo apt-get update && sudo apt-get install -y \
-          curl \
-          gettext \
-          git \
-          jq
-          sudo curl --silent --location -o /usr/local/bin/eksctl "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz"
-          sudo chmod +x /usr/local/bin/eksctl
-
-      - name: Install kubectl
-        uses: azure/setup-kubectl@v3
-
-      - name: Install Helm
-        uses: azure/setup-helm@v3
-        with:
-          version: '3.11.2' # default is latest (stable)
-
-      - name: Deploy app to EKS
-        working-directory: ./k8s/scripts
-        run: |
-          sudo chmod +x setup.sh
-          /bin/bash setup.sh
   ###-----!!!!!!!!!!----- If you selected to destroy the resources
-  destroy_app:
-    name: Uninstall app & destroy K8s resources
-    if: ${{ github.event.inputs.action == 'Destroy' }}
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
-
-      - name: Get kubeconfig file
-        run: aws eks update-kubeconfig --name iTech-final-task-cluster --region us-east-1
-
-      - name: Install eksctl
-        run: |
-          sudo apt-get update && sudo apt-get install -y \
-          curl \
-          gettext \
-          git \
-          jq
-          sudo curl --silent --location -o /usr/local/bin/eksctl "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz"
-          sudo chmod +x /usr/local/bin/eksctl
-
-      - name: Install kubectl
-        uses: azure/setup-kubectl@v3
-
-      - name: Install Helm
-        uses: azure/setup-helm@v3
-        with:
-          version: '3.11.2' # default is latest (stable)
-
-      - name: Destroy app on EKS
-        working-directory: ./k8s/scripts
-        run: |
-          sudo chmod +x destroy.sh 
-          /bin/bash destroy.sh
+  ## Add here - destroy app on EKS first
+ 
   # Second destroy EKS cluster
   tf_destroy_eks:
     name: "Destroy EKS cluster"
-    # if: ${{ github.event.inputs.action == 'Destroy' }}
-    needs: [destroy_app]
+    if: ${{ github.event.inputs.action == 'Destroy' }}
+    # needs: [destroy_app]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
