@@ -183,6 +183,12 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
+          run: |
+            echo 'Hello 1'
+            aws eks update-kubeconfig --name iTech-final-task-cluster --region us-east-1
+            echo 'Hello 2'  
+            cat ~/.kube/config 
+            echo 'Hello 3'
 
       - name: Install eksctl
         run: |
@@ -227,7 +233,12 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-
+          run: |
+            echo 'Hello 1'
+            aws eks update-kubeconfig --name iTech-final-task-cluster --region us-east-1
+            echo 'Hello 2'  
+            cat ~/.kube/config 
+            echo 'Hello 3'
       - name: Install eksctl
         run: |
           sudo apt-get update && sudo apt-get install -y \
@@ -258,7 +269,8 @@ jobs:
   # Second destroy EKS cluster
   tf_destroy_eks:
     name: "Destroy EKS cluster"
-    needs: [destroy_app]
+    if: ${{ github.event.inputs.action == 'Destroy' }}
+    # needs: [destroy_app]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
