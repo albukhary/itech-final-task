@@ -2,7 +2,7 @@ resource "aws_eks_node_group" "node-ec2" {
   cluster_name    = aws_eks_cluster.eks-cluster.name
   node_group_name = var.nodegroup_name
   node_role_arn   = aws_iam_role.NodeGroupRole.arn
-  subnet_ids      = flatten([var.public_subnets_id]) #var.private_subnets_id, 
+  subnet_ids      = flatten([var.private_subnets_id]) #var.private_subnets_id, 
 
   scaling_config {
     desired_size = 1
