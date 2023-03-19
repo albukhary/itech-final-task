@@ -19,6 +19,16 @@ resource "aws_security_group_rule" "cluster_inbound" {
   type                     = "ingress"
 }
 
+resource "aws_security_group_rule" "cluster_alb_webhook_inbound" {
+  description       = "Open communication to AWS Load Balancer webhook service"
+  from_port         = 9443
+  protocol          = "tcp"
+  security_group_id = aws_security_group.eks_cluster.id
+  cidr_blocks       = ["0.0.0.0/0"]
+  to_port           = 9443 #443
+  type              = "ingress"
+}
+
 resource "aws_security_group_rule" "cluster_outbound" {
   description              = "Allow cluster API Server to communicate with the worker nodes"
   from_port                = 0 #1024
