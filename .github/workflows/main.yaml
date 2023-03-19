@@ -377,7 +377,7 @@ jobs:
           gettext \
           git \
           jq
-          sudo curl --silent --location -o /usr/local/bin/eksctl "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | sudo tar xz -C /usr/local/bin
+          sudo curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | sudo tar xz -C /usr/local/bin
           sudo chmod +x /usr/local/bin/eksctl
           dpkg --print-architecture
 
@@ -424,7 +424,7 @@ jobs:
           gettext \
           git \
           jq
-          sudo curl --silent --location -o /usr/local/bin/eksctl "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | sudo tar xz -C /usr/local/bin
+          sudo curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | sudo tar xz -C /usr/local/bin
           sudo chmod +x /usr/local/bin/eksctl
           dpkg --print-architecture
 
