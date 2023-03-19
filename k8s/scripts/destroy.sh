@@ -1,5 +1,7 @@
 #################### How to undo everything
 
+aws eks update-kubeconfig --name iTech-final-task-cluster --region us-east-1
+
 # Now delete manifest files
 kubectl delete -f ../2-ingress.yaml
 kubectl delete -f ../1-express.yaml
