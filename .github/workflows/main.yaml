@@ -210,7 +210,7 @@ jobs:
   ## Destroy app on EKS first
   destroy_app:
     if: ${{ github.event.inputs.action == 'Destroy' }}
-    name: TEST Uninstall app & destroy K8s resources
+    name: Uninstall app & destroy resources on EKS
     runs-on: ubuntu-latest
 
     steps:
