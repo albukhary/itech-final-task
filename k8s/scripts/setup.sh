@@ -106,6 +106,7 @@ kubectl apply -f ../2-ingress.yaml
 sleep 60
 
 # Get the URL of ingress to access from browser
+echo -e "\033[1;32m"
 kubectl get ing -n staging | awk 'FNR == 2 {print $4}'
 
 # How to make http request with a host
