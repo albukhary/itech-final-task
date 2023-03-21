@@ -151,8 +151,6 @@ jobs:
       run: |
         terraform plan -input=false -no-color -out=tfplan \
         && terraform show -no-color tfplan          
-#        -var "instance_type=${{ github.event.inputs.instance_type }}" \
-#        -var "instance_num=${{ github.event.inputs.instance_num }}" \
     - name: Apply Terraform
       if: steps.plan.outcome == 'success'
       id: apply
@@ -165,8 +163,8 @@ jobs:
   # After successful deployment of EKS Cluster
   # Deploy app on EKS Cluster
   run_app:
-    needs: [tf_plan_apply_vpc]
-    name: TEST Create K8s resources and run app
+    needs: [tf_plan_apply_eks]
+    name: Create K8s resources and run app
     runs-on: ubuntu-latest
 
     steps:
@@ -370,53 +368,3 @@ jobs:
         aws dynamodb delete-table \
           --table-name ${{ env.BACKEND_DYNAMO_TABLE_NAME }} \
       if: steps.check-dynamodb-table.outputs.exists == 'true'
-
-
-
-
-
-
-  # After successful deployment of EKS Cluster
-  run_app_test:
-    if: ${{ github.event.inputs.action == 'Test_Deploy_App' }}
-    name: TEST Create K8s resources and run app
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
-
-      - name: Get kubeconfig file
-        run: aws eks update-kubeconfig --name iTech-final-task-cluster --region us-east-1
-
-      - name: Install eksctl
-        run: |
-          sudo apt-get update && sudo apt-get install -y \
-          curl \
-          gettext \
-          git \
-          jq
-          sudo curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | sudo tar xz -C /usr/local/bin
-          sudo chmod +x /usr/local/bin/eksctl
-          dpkg --print-architecture
-
-      - name: Install kubectl
-        uses: azure/setup-kubectl@v3
-
-      - name: Install Helm
-        uses: azure/setup-helm@v3
-        with:
-          version: '3.11.2' # default is latest (stable)
-
-      - name: Deploy app to EKS
-        working-directory: ./k8s/scripts
-        run: |
-          sudo chmod +x setup.sh
-          /bin/bash setup.sh
