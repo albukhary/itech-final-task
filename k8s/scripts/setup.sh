@@ -63,22 +63,22 @@ aws iam attach-role-policy \
   --policy-arn arn:aws:iam::906871231312:policy/AWSLoadBalancerControllerIAMPolicy \
   --role-name AmazonEKSLoadBalancerControllerRole
 
-# # Create AWS Load Balancer Controller service account yaml
-# cat >aws-load-balancer-controller-service-account.yaml <<EOF
-# apiVersion: v1
-# kind: ServiceAccount
-# metadata:
-#   labels:
-#     app.kubernetes.io/component: controller
-#     app.kubernetes.io/name: aws-load-balancer-controller
-#   name: aws-load-balancer-controller
-#   namespace: kube-system
-#   annotations:
-#     eks.amazonaws.com/role-arn: arn:aws:iam::906871231312:role/AmazonEKSLoadBalancerControllerRole
-# EOF
+# Create AWS Load Balancer Controller service account yaml
+cat >aws-load-balancer-controller-service-account.yaml <<EOF
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app.kubernetes.io/component: controller
+    app.kubernetes.io/name: aws-load-balancer-controller
+  name: aws-load-balancer-controller
+  namespace: kube-system
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::906871231312:role/AmazonEKSLoadBalancerControllerRole
+EOF
 
 # Create the Kubernetes service account on your cluster.
-kubectl apply -f ../aws-load-balancer-controller-service-account.yaml
+kubectl apply -f aws-load-balancer-controller-service-account.yaml
 
 # Add helm repository to install EKS charts
 helm repo add eks https://aws.github.io/eks-charts
