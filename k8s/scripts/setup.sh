@@ -80,6 +80,8 @@ EOF
 # Create the Kubernetes service account on your cluster.
 kubectl apply -f aws-load-balancer-controller-service-account.yaml
 
+sleep 30
+
 # Add helm repository to install EKS charts
 helm repo add eks https://aws.github.io/eks-charts
 
@@ -92,6 +94,8 @@ helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
   --set clusterName=iTech-final-task-cluster \
   --set serviceAccount.create=false \
   --set serviceAccount.name=aws-load-balancer-controller 
+
+sleep 30
 
 # Now apply manifest files
 kubectl apply -f ../1-express.yaml

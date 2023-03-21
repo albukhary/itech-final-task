@@ -10,7 +10,7 @@ kubectl delete -f ../1-express.yaml
 helm uninstall aws-load-balancer-controller -n kube-system
 
 # Destroy the Kubernetes service account on your cluster.
-kubectl delete -f ../aws-load-balancer-controller-service-account.yaml
+kubectl delete -f aws-load-balancer-controller-service-account.yaml
 
 # Detach policy from role
 aws iam detach-role-policy \
