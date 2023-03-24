@@ -13,6 +13,7 @@
 
 ## .github/workflows
 [![Deploy | Destroy](https://github.com/albukhary/itech-final-task/actions/workflows/main.yaml/badge.svg?branch=main)](https://github.com/albukhary/itech-final-task/actions/workflows/main.yaml)
+
 Go to Actions section and select `Deploy` option in workflow dispatch. 
 Select `Create K8s resources and run app` job, `Deploy app to EKS` step.
 You will be provided with a URL to access the application deployed on the EKS cluster
